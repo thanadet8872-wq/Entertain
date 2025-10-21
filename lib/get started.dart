@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-
+import 'Signin.dart';
 class GetStartedScreen extends StatefulWidget {
   @override
   _GetStartedScreenState createState() => _GetStartedScreenState();
@@ -82,6 +82,10 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
     }
   }
 
+
+
+
+
   // สร้างดาวระยิบระยับ
   List<Widget> _buildStars() {
     return List.generate(8, (index) {
@@ -130,17 +134,11 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
 
 
   void _handleSelection(String role) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Selected: $role',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Color(0xFFD4AF37),
-        duration: Duration(seconds: 2),
+    // นำทางไปหน้า Sign In
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SignInScreen(),
       ),
     );
   }
@@ -166,6 +164,8 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
         child: SafeArea(
         child: Stack(
           children: [
+
+            
             // Background decorative elements - ตำแหน่งและสีเหมือนในรูป
             Positioned(
               top: 70,
@@ -231,7 +231,8 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          // Animated image stack - ใช้ TweenAnimationBuilder แทน
+                          // รูปภาพวงกลม 3 รูปแบบใน Stack                         
+
                           Stack(
                             alignment: Alignment.center,
                             children: [
