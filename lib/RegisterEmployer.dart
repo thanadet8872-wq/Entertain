@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Rejister2.dart';
+import 'smsOTP.dart';
 
 class RegisterEmployer extends StatefulWidget {
   @override
@@ -12,8 +12,9 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
-  
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
   String _selectedRole = 'Employer';
   bool _acceptTerms = false;
   bool _acceptPrivacy = false;
@@ -48,7 +49,7 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 20),
-              
+
               // Full Name Field
               _buildLabel('Full Name'),
               SizedBox(height: 8),
@@ -56,9 +57,9 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                 controller: _fullNameController,
                 hintText: 'Enter your full name',
               ),
-              
+
               SizedBox(height: 20),
-              
+
               // Display Name Field
               _buildLabel('Display Name'),
               SizedBox(height: 8),
@@ -66,9 +67,9 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                 controller: _displayNameController,
                 hintText: 'Enter your display name',
               ),
-              
+
               SizedBox(height: 20),
-              
+
               // Role Field
               _buildLabel('Role'),
               SizedBox(height: 8),
@@ -86,7 +87,7 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                     style: TextStyle(color: Colors.white),
                     items: ['Employer', 'Pretty'].map((String value) {
                       return DropdownMenuItem<String>(
-                        value: value, 
+                        value: value,
                         child: Text(value),
                       );
                     }).toList(),
@@ -98,9 +99,9 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 20),
-              
+
               // Email Field
               _buildLabel('Email'),
               SizedBox(height: 8),
@@ -109,9 +110,9 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                 hintText: 'Enter your email',
                 keyboardType: TextInputType.emailAddress,
               ),
-              
+
               SizedBox(height: 20),
-              
+
               // Phone Number Field
               _buildLabel('Phone Number'),
               SizedBox(height: 8),
@@ -120,9 +121,9 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                 hintText: 'Enter your phone number',
                 keyboardType: TextInputType.phone,
               ),
-              
+
               SizedBox(height: 20),
-              
+
               // Password Field
               _buildLabel('Password'),
               SizedBox(height: 8),
@@ -142,9 +143,9 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                   },
                 ),
               ),
-              
+
               SizedBox(height: 20),
-              
+
               // Confirm Password Field
               _buildLabel('Confirm Password'),
               SizedBox(height: 8),
@@ -154,7 +155,9 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                 obscureText: _obscureConfirmPassword,
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                    _obscureConfirmPassword
+                        ? Icons.visibility_off
+                        : Icons.visibility,
                     color: Colors.white54,
                   ),
                   onPressed: () {
@@ -164,9 +167,9 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                   },
                 ),
               ),
-              
+
               SizedBox(height: 30),
-              
+
               // Terms and Conditions Checkbox
               Row(
                 children: [
@@ -183,15 +186,12 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                   Expanded(
                     child: Text(
                       'Terms and Conditions',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: Colors.white, fontSize: 14),
                     ),
                   ),
                 ],
               ),
-              
+
               // Privacy Policy Checkbox
               Row(
                 children: [
@@ -208,17 +208,14 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                   Expanded(
                     child: Text(
                       'Privacy Policy',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: Colors.white, fontSize: 14),
                     ),
                   ),
                 ],
               ),
-              
+
               SizedBox(height: 30),
-              
+
               // Register Button
               Container(
                 width: double.infinity,
@@ -231,11 +228,12 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                   onPressed: () {
                     if (_acceptTerms && _acceptPrivacy) {
                       if (_phoneController.text.isNotEmpty) {
-                        // Navigate to Verify Personal Info screen
+                        // Navigate to SMS OTP screen
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => VerifyPersonalInfoScreen(),
+                            builder: (context) =>
+                                SMSOTPScreen(phoneNumber: _phoneController.text),
                           ),
                         );
                       } else {
@@ -249,7 +247,9 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Please accept Terms and Conditions and Privacy Policy'),
+                          content: Text(
+                            'Please accept Terms and Conditions and Privacy Policy',
+                          ),
                           backgroundColor: Colors.red,
                         ),
                       );
@@ -272,7 +272,7 @@ class _RegisterEmployerState extends State<RegisterEmployer> {
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 30),
             ],
           ),

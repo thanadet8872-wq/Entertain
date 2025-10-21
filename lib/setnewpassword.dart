@@ -7,7 +7,8 @@ class SetNewPasswordScreen extends StatefulWidget {
 
 class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _obscureNewPassword = true;
   bool _obscureConfirmPassword = true;
 
@@ -30,7 +31,7 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 40),
-              
+
               // Title
               Text(
                 'Set new Password',
@@ -40,9 +41,9 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              
+
               SizedBox(height: 16),
-              
+
               // Subtitle
               Text(
                 'Create a new password. Ensure it differs from previous ones for security',
@@ -52,9 +53,9 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                   height: 1.5,
                 ),
               ),
-              
+
               SizedBox(height: 40),
-              
+
               // New Password Label
               Text(
                 'New password',
@@ -64,9 +65,9 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              
+
               SizedBox(height: 12),
-              
+
               // New Password Input Field
               Container(
                 decoration: BoxDecoration(
@@ -82,7 +83,9 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                     hintStyle: TextStyle(color: Colors.grey[600]),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscureNewPassword ? Icons.visibility_off : Icons.visibility,
+                        _obscureNewPassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                         color: Colors.grey[600],
                       ),
                       onPressed: () {
@@ -92,13 +95,16 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                       },
                     ),
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 20),
-              
+
               // Confirm Password Label
               Text(
                 'Confirm password',
@@ -108,9 +114,9 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              
+
               SizedBox(height: 12),
-              
+
               // Confirm Password Input Field
               Container(
                 decoration: BoxDecoration(
@@ -126,7 +132,9 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                     hintStyle: TextStyle(color: Colors.grey[600]),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                        _obscureConfirmPassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                         color: Colors.grey[600],
                       ),
                       onPressed: () {
@@ -136,13 +144,16 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                       },
                     ),
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 40),
-              
+
               // Update Password Button
               Center(
                 child: Container(
@@ -154,9 +165,10 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                   ),
                   child: ElevatedButton(
                     onPressed: () {
-                      if (_newPasswordController.text.isNotEmpty && 
+                      if (_newPasswordController.text.isNotEmpty &&
                           _confirmPasswordController.text.isNotEmpty) {
-                        if (_newPasswordController.text == _confirmPasswordController.text) {
+                        if (_newPasswordController.text ==
+                            _confirmPasswordController.text) {
                           // Password update logic
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -177,7 +189,9 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Please fill in both password fields'),
+                            content: Text(
+                              'Please fill in both password fields',
+                            ),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -202,7 +216,7 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 30),
             ],
           ),

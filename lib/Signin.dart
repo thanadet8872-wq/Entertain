@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'RegisterEmployer.dart';
 import 'ForgotPassword.dart';
 
-
-
 class SignInScreen extends StatefulWidget {
   @override
   _SignInScreenState createState() => _SignInScreenState();
@@ -19,16 +17,14 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       backgroundColor: Color(0xFF161616),
       body: Container(
-        decoration: BoxDecoration(
-          color: Color(0xFF161616),
-        ),
+        decoration: BoxDecoration(color: Color(0xFF161616)),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 32.0),
             child: Column(
               children: [
                 SizedBox(height: 60),
-                
+
                 // Logo
                 Container(
                   width: 200,
@@ -40,12 +36,11 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: 40),
-                
-              
+
                 SizedBox(height: 8),
-    
+
                 // Email Field
                 Container(
                   decoration: BoxDecoration(
@@ -59,15 +54,18 @@ class _SignInScreenState extends State<SignInScreen> {
                     decoration: InputDecoration(
                       hintText: 'Email or Username',
                       hintStyle: TextStyle(color: Colors.white54),
-                      prefixIcon: Icon(Icons.person, color: const Color.fromARGB(255, 252, 252, 252)),
+                      prefixIcon: Icon(
+                        Icons.person,
+                        color: const Color.fromARGB(255, 252, 252, 252),
+                      ),
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(20),
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: 20),
-                
+
                 // Password Field
                 Container(
                   decoration: BoxDecoration(
@@ -82,10 +80,15 @@ class _SignInScreenState extends State<SignInScreen> {
                     decoration: InputDecoration(
                       hintText: 'Password',
                       hintStyle: TextStyle(color: Colors.white54),
-                      prefixIcon: Icon(Icons.lock, color: const Color.fromARGB(255, 255, 255, 255)),
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                      ),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
                           color: Colors.white54,
                         ),
                         onPressed: () {
@@ -99,9 +102,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: 30),
-                
+
                 // Sign In Button
                 Container(
                   width: double.infinity,
@@ -109,8 +112,8 @@ class _SignInScreenState extends State<SignInScreen> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        const Color.fromARGB(255, 255, 231, 169), 
-                        const Color.fromARGB(255, 255, 231, 169)
+                        const Color.fromARGB(255, 255, 231, 169),
+                        const Color.fromARGB(255, 255, 231, 169),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(15),
@@ -137,14 +140,16 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: 20),
-                
+
                 TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
+                      MaterialPageRoute(
+                        builder: (context) => ForgotPasswordScreen(),
+                      ),
                     );
                   },
                   child: Text(
@@ -155,9 +160,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: 30),
-                
+
                 // Social Login
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -167,21 +172,25 @@ class _SignInScreenState extends State<SignInScreen> {
                     _socialButton('image/twitter.png'),
                   ],
                 ),
-                
+
                 SizedBox(height: 30),
-                
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "Don't have an account? ",
-                      style: TextStyle(color: const Color.fromARGB(201, 251, 205, 135)),
+                      style: TextStyle(
+                        color: const Color.fromARGB(201, 251, 205, 135),
+                      ),
                     ),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => RegisterEmployer()),
+                          MaterialPageRoute(
+                            builder: (context) => RegisterEmployer(),
+                          ),
                         );
                       },
                       child: Text(
@@ -194,7 +203,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ],
                 ),
-                
+
                 SizedBox(height: 30),
               ],
             ),

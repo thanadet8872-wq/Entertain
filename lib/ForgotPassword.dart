@@ -28,7 +28,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 40),
-              
+
               // Title
               Text(
                 'Forgot Your password?',
@@ -38,20 +38,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              
+
               SizedBox(height: 16),
-              
+
               // Subtitle
               Text(
                 'Please enter your email to reset the password',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 16,
-                ),
+                style: TextStyle(color: Colors.white70, fontSize: 16),
               ),
-              
+
               SizedBox(height: 40),
-              
+
               // Email Label
               Text(
                 'Your Email',
@@ -61,9 +58,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              
+
               SizedBox(height: 12),
-              
+
               // Email Input Field
               Container(
                 decoration: BoxDecoration(
@@ -78,13 +75,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     hintText: 'Enter your email',
                     hintStyle: TextStyle(color: Colors.grey[600]),
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 40),
-              
+
               // Reset Password Button
               Center(
                 child: Container(
@@ -101,7 +101,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CheckYourEmailScreen(email: _emailController.text),
+                            builder: (context) => CheckYourEmailScreen(
+                              email: _emailController.text,
+                            ),
                           ),
                         );
                       } else {
@@ -133,7 +135,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 30),
             ],
           ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SMSOTPScreen extends StatefulWidget {
   final String phoneNumber;
-  
+
   const SMSOTPScreen({Key? key, required this.phoneNumber}) : super(key: key);
 
   @override
@@ -10,7 +10,10 @@ class SMSOTPScreen extends StatefulWidget {
 }
 
 class _SMSOTPScreenState extends State<SMSOTPScreen> {
-  List<TextEditingController> _controllers = List.generate(6, (index) => TextEditingController());
+  List<TextEditingController> _controllers = List.generate(
+    6,
+    (index) => TextEditingController(),
+  );
   List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
 
   @override
@@ -32,7 +35,7 @@ class _SMSOTPScreenState extends State<SMSOTPScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 40),
-              
+
               // Title
               Text(
                 'SMS OTP',
@@ -42,9 +45,9 @@ class _SMSOTPScreenState extends State<SMSOTPScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              
+
               SizedBox(height: 40),
-              
+
               // OTP Input Fields
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -82,9 +85,9 @@ class _SMSOTPScreenState extends State<SMSOTPScreen> {
                   );
                 }),
               ),
-              
+
               SizedBox(height: 30),
-              
+
               // Send OTP again link
               Center(
                 child: GestureDetector(
@@ -92,7 +95,9 @@ class _SMSOTPScreenState extends State<SMSOTPScreen> {
                     // Resend OTP logic
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('OTP sent again to ${widget.phoneNumber}'),
+                        content: Text(
+                          'OTP sent again to ${widget.phoneNumber}',
+                        ),
                         backgroundColor: Colors.green,
                       ),
                     );
@@ -108,9 +113,9 @@ class _SMSOTPScreenState extends State<SMSOTPScreen> {
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 40),
-              
+
               // Submit Button
               Center(
                 child: Container(
@@ -122,16 +127,23 @@ class _SMSOTPScreenState extends State<SMSOTPScreen> {
                   ),
                   child: ElevatedButton(
                     onPressed: () {
-                      String code = _controllers.map((controller) => controller.text).join();
+                      String code = _controllers
+                          .map((controller) => controller.text)
+                          .join();
                       if (code.length == 6) {
                         // Navigate back to previous screen or show success
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Phone number verified successfully!'),
+                            content: Text(
+                              'Phone number verified successfully!',
+                            ),
                             backgroundColor: Colors.green,
                           ),
                         );
-                        Navigator.pop(context, true); // Return true to indicate success
+                        Navigator.pop(
+                          context,
+                          true,
+                        ); // Return true to indicate success
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -160,7 +172,7 @@ class _SMSOTPScreenState extends State<SMSOTPScreen> {
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 30),
             ],
           ),

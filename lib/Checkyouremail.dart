@@ -3,7 +3,7 @@ import 'setnewpassword.dart';
 
 class CheckYourEmailScreen extends StatefulWidget {
   final String email;
-  
+
   const CheckYourEmailScreen({Key? key, required this.email}) : super(key: key);
 
   @override
@@ -11,7 +11,10 @@ class CheckYourEmailScreen extends StatefulWidget {
 }
 
 class _CheckYourEmailScreenState extends State<CheckYourEmailScreen> {
-  List<TextEditingController> _controllers = List.generate(6, (index) => TextEditingController());
+  List<TextEditingController> _controllers = List.generate(
+    6,
+    (index) => TextEditingController(),
+  );
   List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
 
   @override
@@ -33,7 +36,7 @@ class _CheckYourEmailScreenState extends State<CheckYourEmailScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 40),
-              
+
               // Title
               Text(
                 'Check your email',
@@ -43,9 +46,9 @@ class _CheckYourEmailScreenState extends State<CheckYourEmailScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              
+
               SizedBox(height: 16),
-              
+
               // Subtitle
               Text(
                 'We sent a reset link to ${widget.email.isNotEmpty ? widget.email : 'test@werdev.io'}\nenter 6 digit code that mentioned in the email',
@@ -55,9 +58,9 @@ class _CheckYourEmailScreenState extends State<CheckYourEmailScreen> {
                   height: 1.5,
                 ),
               ),
-              
+
               SizedBox(height: 40),
-              
+
               // OTP Input Fields
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -95,9 +98,9 @@ class _CheckYourEmailScreenState extends State<CheckYourEmailScreen> {
                   );
                 }),
               ),
-              
+
               SizedBox(height: 40),
-              
+
               // Verify Code Button
               Center(
                 child: Container(
@@ -109,7 +112,9 @@ class _CheckYourEmailScreenState extends State<CheckYourEmailScreen> {
                   ),
                   child: ElevatedButton(
                     onPressed: () {
-                      String code = _controllers.map((controller) => controller.text).join();
+                      String code = _controllers
+                          .map((controller) => controller.text)
+                          .join();
                       if (code.length == 6) {
                         // Navigate to Set New Password screen
                         Navigator.push(
@@ -146,9 +151,9 @@ class _CheckYourEmailScreenState extends State<CheckYourEmailScreen> {
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 30),
-              
+
               // Resend Email Link
               Center(
                 child: GestureDetector(
@@ -156,7 +161,9 @@ class _CheckYourEmailScreenState extends State<CheckYourEmailScreen> {
                     // Resend email logic
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Reset link sent again to ${widget.email}'),
+                        content: Text(
+                          'Reset link sent again to ${widget.email}',
+                        ),
                         backgroundColor: Colors.green,
                       ),
                     );
@@ -165,10 +172,7 @@ class _CheckYourEmailScreenState extends State<CheckYourEmailScreen> {
                   child: RichText(
                     text: TextSpan(
                       text: "Haven't got the email yet? ",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: Colors.white, fontSize: 14),
                       children: [
                         TextSpan(
                           text: 'Resend email',
@@ -183,7 +187,7 @@ class _CheckYourEmailScreenState extends State<CheckYourEmailScreen> {
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 30),
             ],
           ),
