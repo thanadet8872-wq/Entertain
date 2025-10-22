@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'verify.dart';
 
 class SMSOTPScreen extends StatefulWidget {
   final String phoneNumber;
@@ -131,7 +132,6 @@ class _SMSOTPScreenState extends State<SMSOTPScreen> {
                           .map((controller) => controller.text)
                           .join();
                       if (code.length == 6) {
-                        // Navigate back to previous screen or show success
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(
@@ -140,10 +140,12 @@ class _SMSOTPScreenState extends State<SMSOTPScreen> {
                             backgroundColor: Colors.green,
                           ),
                         );
-                        Navigator.pop(
+                        Navigator.pushReplacement(
                           context,
-                          true,
-                        ); // Return true to indicate success
+                          MaterialPageRoute(
+                            builder: (context) => VerifyScreen(),
+                          ),
+                        );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
