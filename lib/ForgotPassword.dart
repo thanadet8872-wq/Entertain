@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'Checkyouremail.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -7,6 +8,17 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  void openWeb(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Could not open the link')));
+    }
+  }
+
   final TextEditingController _emailController = TextEditingController();
 
   @override
@@ -137,6 +149,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
 
               SizedBox(height: 30),
+              // Social Row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () => openWeb('https://www.facebook.com'),
+                    child: Image.asset('image/facebook.png', width: 48),
+                  ),
+                  SizedBox(width: 16),
+                  InkWell(
+                    onTap: () => openWeb('https://www.google.com'),
+                    child: Image.asset('image/google.png', width: 48),
+                  ),
+                  SizedBox(width: 16),
+                  InkWell(
+                    onTap: () => openWeb('https://x.com'),
+                    child: Image.asset('image/x.png', width: 48),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
