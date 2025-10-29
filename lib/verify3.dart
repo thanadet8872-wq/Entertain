@@ -22,7 +22,7 @@ class _Verify3ScreenState extends State<Verify3Screen> {
                 'Verify your personal information',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 22,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.left,
