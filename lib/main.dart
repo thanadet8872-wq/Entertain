@@ -3,6 +3,7 @@ import 'get started.dart';
 import 'Welcome.dart';
 import 'Chat.dart';
 import 'Notification.dart';
+import 'Profilepertty1.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,7 +24,71 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => WelcomeScreen(),
         '/chat': (context) => ChatScreen(),
         '/notification': (context) => NotificationScreen(),
+        '/profile': (context) => Profilepertty1(),
+        '/home': (context) => HomeScreen(),
+        '/myjob': (context) => MyJobScreen(),
+        '/favorite': (context) => FavoriteScreen(),
       },
+    );
+  }
+}
+
+// Home Screen
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text('Home'),
+        backgroundColor: Color(0xFF1A1A1A),
+      ),
+      body: Center(
+        child: Text(
+          'Home Screen',
+          style: TextStyle(color: Colors.white, fontSize: 24),
+        ),
+      ),
+    );
+  }
+}
+
+// My Job Screen
+class MyJobScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text('My Job'),
+        backgroundColor: Color(0xFF1A1A1A),
+      ),
+      body: Center(
+        child: Text(
+          'My Job Screen',
+          style: TextStyle(color: Colors.white, fontSize: 24),
+        ),
+      ),
+    );
+  }
+}
+
+// Favorite Screen
+class FavoriteScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text('Favorite'),
+        backgroundColor: Color(0xFF1A1A1A),
+      ),
+      body: Center(
+        child: Text(
+          'Favorite Screen',
+          style: TextStyle(color: Colors.white, fontSize: 24),
+        ),
+      ),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'JobCardWidget.dart';
-
 import 'Profilepertty1.dart';
+import 'MenuDrawer.dart';
 
 
 class WelcomeScreen extends StatefulWidget {
@@ -14,6 +14,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   int _selectedCategory = 0;
   int _selectedGender = 0;
   int _selectedIndex = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // Search state
   final TextEditingController _searchController = TextEditingController();
@@ -94,7 +95,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Color(0xFF181818),
+      endDrawer: MenuDrawer(),
       appBar: AppBar(
         backgroundColor: Color(0xFF181818),
         elevation: 0,
@@ -111,7 +114,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             SizedBox(width: 8),
             IconButton(
               icon: Icon(Icons.menu, color: Colors.white),
-              onPressed: () {},
+              onPressed: () {
+                _scaffoldKey.currentState?.openEndDrawer();
+              },
             ),
           ],
         ),

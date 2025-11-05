@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'MenuDrawer.dart';
 
 class Profilepertty1 extends StatefulWidget {
   const Profilepertty1({super.key});
@@ -9,12 +10,15 @@ class Profilepertty1 extends StatefulWidget {
 
 class _Profilepertty1State extends State<Profilepertty1> {
   bool isFavorite = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.black,
+      endDrawer: MenuDrawer(),
       body: Stack(
         children: [
           // Background image - fixed position
@@ -253,7 +257,9 @@ class _Profilepertty1State extends State<Profilepertty1> {
                   ),
                   IconButton(
                     icon: Icon(Icons.menu, color: Colors.white, size: 28),
-                    onPressed: () {},
+                    onPressed: () {
+                      _scaffoldKey.currentState?.openEndDrawer();
+                    },
                   ),
                 ],
               ),
@@ -298,79 +304,38 @@ class _Profilepertty1State extends State<Profilepertty1> {
   }
 
   Widget _packageCard() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Color(0xFFB29B6E),
-      ),
-      child: Column(
-        children: [
-          // header bar
-          Container(
+    return Stack(
+      children: [
+        // Background image
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.asset(
+            'image/pakget.png',
+            fit: BoxFit.cover,
             width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 9),
-            decoration: BoxDecoration(
-              color: Color(0xFF7F6A40),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-            ),
-            child: Text(
-              'แพ็คเกจ',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
+          ),
+        ),
+        // Clickable chat area
+        Positioned(
+          right: 0,
+          top: 0,
+          bottom: 0,
+          child: InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, '/chat');
+            },
+            borderRadius: BorderRadius.horizontal(right: Radius.circular(10)),
+            child: Container(
+              width: 80,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.horizontal(right: Radius.circular(10)),
               ),
             ),
           ),
-          // white body with content
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
-            ),
-            padding: EdgeInsets.all(12),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '-รายละเอียด',
-                        style: TextStyle(color: Colors.black87, fontSize: 12),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        '-ราคา',
-                        style: TextStyle(color: Colors.black87, fontSize: 12),
-                      ),
-                    ],
-                  ),
-                ),
-                // vertical divider
-                Container(
-                  width: 1,
-                  height: 45,
-                  color: Colors.grey[300],
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                ),
-                // chat icon and number
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.chat_bubble_outline, color: Colors.black54, size: 22),
-                    SizedBox(height: 4),
-                    Text(
-                      '100',
-                      style: TextStyle(color: Colors.black54, fontSize: 11),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -397,8 +362,8 @@ class _Profilepertty1State extends State<Profilepertty1> {
               label: 'Home',
               isActive: false,
               onTap: () {
-                // Navigate to Home
-                Navigator.pushNamed(context, '/home');
+                // Navigate to Welcome
+                Navigator.pushNamed(context, '/welcome');
               },
             ),
             _navItem(
