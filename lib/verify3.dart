@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'verify2.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'Location.dart';
 
 class Verify3Screen extends StatefulWidget {
   @override
@@ -7,6 +9,18 @@ class Verify3Screen extends StatefulWidget {
 }
 
 class _Verify3ScreenState extends State<Verify3Screen> {
+  XFile? _imageFile;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = pickedFile;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,29 +74,44 @@ class _Verify3ScreenState extends State<Verify3Screen> {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 32),
-                    Icon(
-                      Icons.camera_alt_outlined,
-                      color: Colors.grey.shade500,
-                      size: 90,
+                    GestureDetector(
+                      onTap: _pickImage,
+                      child: _imageFile == null
+                          ? Icon(
+                              Icons.camera_alt_outlined,
+                              color: Colors.grey.shade500,
+                              size: 90,
+                            )
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.file(
+                                File(_imageFile!.path),
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                     ),
                     SizedBox(height: 48),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Verify2Screen(),
-                            ),
-                          );
-                        },
+                        onPressed: _imageFile == null
+                            ? null
+                            : () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LocationScreen(),
+                                  ),
+                                );
+                              },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFF3C892),
+                          backgroundColor: _imageFile == null ? Colors.grey.shade400 : Color(0xFFF3C892),
                           foregroundColor: Colors.black,
                           padding: EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         child: Text(
@@ -90,6 +119,7 @@ class _Verify3ScreenState extends State<Verify3Screen> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
+                            color: _imageFile == null ? Colors.grey.shade700 : Colors.black,
                           ),
                         ),
                       ),

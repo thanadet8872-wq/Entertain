@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'RegisterEmployer.dart';
 import 'ForgotPassword.dart';
+import 'Welcome.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -120,7 +121,21 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   child: ElevatedButton(
                     onPressed: () {
-                      print('Sign In pressed');
+                      if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Please enter your Email and Password'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WelcomeScreen(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
