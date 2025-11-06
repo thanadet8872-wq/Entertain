@@ -111,13 +111,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Navigator.pushNamed(context, '/notification');
               },
             ),
-            SizedBox(width: 8),
-            IconButton(
-              icon: Icon(Icons.menu, color: Colors.white),
-              onPressed: () {
-                _scaffoldKey.currentState?.openEndDrawer();
-              },
-            ),
           ],
         ),
       ),
@@ -544,7 +537,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   onPressed: () {
                     Navigator.pushNamed(context, '/chat');
                   },
-                  child: Icon(Icons.chat, color: Colors.black),
+                  child: Image.asset(
+                    'image/chat.png',
+                    width: 28,
+                    height: 28,
+                  ),
                 ),
                 SizedBox(height: 16),
                 FloatingActionButton(
@@ -581,10 +578,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Navigator.pushNamed(context, '/chat');
           }
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble_outline),
+            icon: Image.asset(
+              'image/chat.png',
+              width: 24,
+              height: 24,
+              color: _selectedIndex == 1 ? Color(0xFFF3C892) : Colors.white,
+            ),
             label: 'Chat',
           ),
           BottomNavigationBarItem(
