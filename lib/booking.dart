@@ -159,27 +159,17 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
 						),
 						SizedBox(height: 24),
 
-						// Working Dates Section
-						Text(
-							'Working Date',
-							style: TextStyle(
-								color: Colors.white,
-								fontSize: 16,
-								fontWeight: FontWeight.bold,
-								fontFamily: 'Kanit',
-							),
-						),
-						SizedBox(height: 12),
-
-						// List of working dates
+						// List of working dates - Each in separate box
 						ListView.builder(
 							shrinkWrap: true,
 							physics: NeverScrollableScrollPhysics(),
 							itemCount: workingDates.length,
 							itemBuilder: (context, index) {
 								final dateInfo = workingDates[index];
+								final isLastItem = index == workingDates.length - 1;
+								
 								return Padding(
-									padding: EdgeInsets.only(bottom: 16),
+									padding: EdgeInsets.only(bottom: isLastItem ? 0 : 12),
 									child: Container(
 										padding: EdgeInsets.all(16),
 										decoration: BoxDecoration(
@@ -189,38 +179,82 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
 										child: Column(
 											crossAxisAlignment: CrossAxisAlignment.start,
 											children: [
+												// Working Date Title in each box
 												Text(
-													'Start Date',
+													'Working Date',
 													style: TextStyle(
-														color: Colors.white70,
-														fontSize: 12,
+														color: Color(0xFFF3C892),
+														fontSize: 16,
+														fontWeight: FontWeight.bold,
 														fontFamily: 'Kanit',
 													),
 												),
+												SizedBox(height: 12),
+												// Headers Row
+												Row(
+													children: [
+														Expanded(
+															flex: 2,
+															child: Text(
+																'Start Date',
+																style: TextStyle(
+																	color: Colors.white,
+																	fontSize: 12,
+																	fontFamily: 'Kanit',
+																),
+															),
+														),
+														SizedBox(width: 8),
+														Expanded(
+															flex: 1,
+															child: Text(
+																'Start Time',
+																style: TextStyle(
+																	color: Colors.white,
+																	fontSize: 12,
+																	fontFamily: 'Kanit',
+																),
+															),
+														),
+														SizedBox(width: 8),
+														Expanded(
+															flex: 1,
+															child: Text(
+																'Working Hours',
+																style: TextStyle(
+																	color: Colors.white,
+																	fontSize: 12,
+																	fontFamily: 'Kanit',
+																),
+															),
+														),
+													],
+												),
 												SizedBox(height: 8),
+												// Input Fields Row
 												Row(
 													children: [
 														// Start Date Input
 														Expanded(
 															flex: 2,
 															child: Container(
-																padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+																padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
 																decoration: BoxDecoration(
-																	color: Color(0xFF1A1A1A),
+																	color: Colors.white,
 																	borderRadius: BorderRadius.circular(8),
-																	border: Border.all(color: Colors.white24),
 																),
 																child: Row(
+																	mainAxisAlignment: MainAxisAlignment.spaceBetween,
 																	children: [
 																		Text(
 																			dateInfo['date'] ?? '',
 																			style: TextStyle(
-																				color: Colors.white,
+																				color: Colors.black,
 																				fontFamily: 'Kanit',
+																				fontSize: 13,
 																			),
 																		),
-																		Spacer(),
-																		Icon(Icons.calendar_today, color: Color(0xFFF3C892), size: 16),
+																		Icon(Icons.calendar_today_outlined, color: Colors.black54, size: 18),
 																	],
 																),
 															),
@@ -230,11 +264,10 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
 														Expanded(
 															flex: 1,
 															child: Container(
-																padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+																padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
 																decoration: BoxDecoration(
-																	color: Color(0xFF1A1A1A),
+																	color: Colors.white,
 																	borderRadius: BorderRadius.circular(8),
-																	border: Border.all(color: Colors.white24),
 																),
 																child: Row(
 																	mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -242,12 +275,12 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
 																		Text(
 																			dateInfo['startTime'] ?? '',
 																			style: TextStyle(
-																				color: Colors.white,
+																				color: Colors.black,
 																				fontFamily: 'Kanit',
-																				fontSize: 12,
+																				fontSize: 13,
 																			),
 																		),
-																		Icon(Icons.arrow_drop_down, color: Color(0xFFF3C892), size: 16),
+																		Icon(Icons.arrow_drop_down, color: Colors.black54, size: 20),
 																	],
 																),
 															),
@@ -257,11 +290,10 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
 														Expanded(
 															flex: 1,
 															child: Container(
-																padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+																padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
 																decoration: BoxDecoration(
-																	color: Color(0xFF1A1A1A),
+																	color: Colors.white,
 																	borderRadius: BorderRadius.circular(8),
-																	border: Border.all(color: Colors.white24),
 																),
 																child: Row(
 																	mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -269,49 +301,52 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
 																		Text(
 																			dateInfo['hours'] ?? '',
 																			style: TextStyle(
-																				color: Colors.white,
+																				color: Colors.black,
 																				fontFamily: 'Kanit',
-																				fontSize: 12,
+																				fontSize: 13,
 																			),
 																		),
-																		Icon(Icons.arrow_drop_down, color: Color(0xFFF3C892), size: 16),
+																		Icon(Icons.arrow_drop_down, color: Colors.black54, size: 20),
 																	],
 																),
 															),
 														),
 													],
 												),
+												
+												// Add Day Button - Only show in last box
+												if (isLastItem) ...[
+													SizedBox(height: 16),
+													GestureDetector(
+														onTap: () {
+															// ฟังก์ชันเพิ่มวันใหม่
+															print('Add Day tapped');
+														},
+														child: Container(
+															padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+															decoration: BoxDecoration(
+																color: Color(0xFFF3C892),
+																borderRadius: BorderRadius.circular(20),
+															),
+															child: Text(
+																'+Add Day',
+																style: TextStyle(
+																	color: Color(0xFF232323),
+																	fontWeight: FontWeight.bold,
+																	fontFamily: 'Kanit',
+																	fontSize: 14,
+																),
+															),
+														),
+													),
+												],
 											],
 										),
 									),
 								);
 							},
 						),
-						SizedBox(height: 16),
-
-						// Add Day Button
-						GestureDetector(
-							onTap: () {
-								// ฟังก์ชันเพิ่มวันใหม่
-								print('Add Day tapped');
-							},
-							child: Container(
-								padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-								decoration: BoxDecoration(
-									color: Color(0xFFF3C892),
-									borderRadius: BorderRadius.circular(20),
-								),
-								child: Text(
-									'+Add Day',
-									style: TextStyle(
-										color: Color(0xFF232323),
-										fontWeight: FontWeight.bold,
-										fontFamily: 'Kanit',
-									),
-								),
-							),
-						),
-						SizedBox(height: 32),
+						SizedBox(height: 24),
 
 						// Continue Button
 						GestureDetector(
