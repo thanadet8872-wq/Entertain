@@ -43,6 +43,59 @@ class ChatScreen extends StatelessWidget {
 			body: ListView(
 				padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
 				children: [
+					// Section: Recent Jobs
+					Text(
+						'Recent Jobs',
+						style: TextStyle(
+							color: Colors.white,
+							fontSize: 18,
+							fontWeight: FontWeight.bold,
+							fontFamily: 'Kanit',
+						),
+					),
+					SizedBox(height: 12),
+					_buildJobCard(
+						title: 'Entertain',
+						name: 'Nay X',
+						date: '20/10/2025',
+						code: 'WRD',
+						price: '฿ 4,000',
+						checkIn: '05:00 น.',
+						checkOut: '09:00 น.',
+						status: 'สำเร็จสิ้น',
+						statusColor: Colors.green,
+						tag: 'สำเร็จสิ้น',
+						tagColor: Colors.green,
+					),
+					SizedBox(height: 12),
+					_buildJobCard(
+						title: 'Entertain',
+						name: 'Nay X',
+						date: '20/10/2025',
+						code: 'WRD',
+						price: '฿ 4,000',
+						checkIn: '10:00 น.',
+						checkOut: '14:00 น.',
+						status: 'ยังไม่ชำระ',
+						statusColor: Color(0xFFF3C892),
+						tag: 'ยังไม่ชำระ',
+						tagColor: Color(0xFFF3C892),
+					),
+					SizedBox(height: 12),
+					_buildJobCard(
+						title: 'Entertain',
+						name: 'Nay X',
+						date: '20/10/2025',
+						code: 'WRD',
+						price: '฿ 4,000',
+						checkIn: '00:00 น.',
+						checkOut: '04:00 น.',
+						status: 'ยกเลิกแล้ว',
+						statusColor: Colors.red,
+						tag: 'ยกเลิกแล้ว',
+						tagColor: Colors.red,
+					),
+					SizedBox(height: 24),
 					// Section: Messages
 					Text(
 						'Messages',
@@ -53,8 +106,8 @@ class ChatScreen extends StatelessWidget {
 							fontFamily: 'Kanit',
 						),
 					),
-					SizedBox(height: 12),
-					..._buildChatsList(context),
+				SizedBox(height: 12),
+				..._buildChatsList(context),
 				],
 			),
 			bottomNavigationBar: BottomNavigationBar(
@@ -152,6 +205,176 @@ class ChatScreen extends StatelessWidget {
 					),
 				);
 			},
+		);
+	}
+
+	Widget _buildJobCard({
+		required String title,
+		required String name,
+		required String date,
+		required String code,
+		required String price,
+		required String checkIn,
+		required String checkOut,
+		required String status,
+		required Color statusColor,
+		required String tag,
+		required Color tagColor,
+	}) {
+		return Container(
+			decoration: BoxDecoration(
+				color: Color(0xFF2D2D2D),
+				borderRadius: BorderRadius.circular(12),
+			),
+			padding: EdgeInsets.all(16),
+			child: Row(
+				mainAxisAlignment: MainAxisAlignment.spaceBetween,
+				children: [
+					// Left side: Job details
+					Expanded(
+						child: Column(
+							crossAxisAlignment: CrossAxisAlignment.start,
+							children: [
+								Text(
+									title,
+									style: TextStyle(
+										color: Colors.white,
+										fontWeight: FontWeight.bold,
+										fontSize: 16,
+										fontFamily: 'Kanit',
+									),
+								),
+								SizedBox(height: 4),
+								Text(
+									name,
+									style: TextStyle(
+										color: Colors.white,
+										fontSize: 13,
+										fontFamily: 'Kanit',
+									),
+								),
+								SizedBox(height: 2),
+								Text(
+									date,
+									style: TextStyle(
+										color: Colors.white70,
+										fontSize: 12,
+										fontFamily: 'Kanit',
+									),
+								),
+								SizedBox(height: 2),
+								Text(
+									code,
+									style: TextStyle(
+										color: Colors.white70,
+										fontSize: 12,
+										fontFamily: 'Kanit',
+									),
+								),
+								SizedBox(height: 2),
+								Text(
+									price,
+									style: TextStyle(
+										color: Colors.white,
+										fontSize: 13,
+										fontFamily: 'Kanit',
+									),
+								),
+							],
+						),
+					),
+					// Right side: Status, times, and button
+					Column(
+						crossAxisAlignment: CrossAxisAlignment.end,
+						children: [
+							// Status with icon
+							Row(
+								children: [
+									Text(
+										status,
+										style: TextStyle(
+											color: statusColor,
+											fontWeight: FontWeight.bold,
+											fontSize: 12,
+											fontFamily: 'Kanit',
+										),
+									),
+									SizedBox(width: 4),
+									if (statusColor == Colors.green)
+										Icon(Icons.circle, color: Colors.green, size: 10)
+									else if (statusColor == Color(0xFFF3C892))
+										Icon(Icons.circle, color: Color(0xFFF3C892), size: 10)
+									else if (statusColor == Colors.red)
+										Icon(Icons.circle, color: Colors.red, size: 10),
+								],
+							),
+							SizedBox(height: 8),
+							// Check in
+							Row(
+								children: [
+									Text(
+										'Check in ',
+										style: TextStyle(
+											color: Colors.white70,
+											fontSize: 11,
+											fontFamily: 'Kanit',
+										),
+									),
+									Text(
+										checkIn,
+										style: TextStyle(
+											color: Colors.white,
+											fontSize: 11,
+											fontWeight: FontWeight.bold,
+											fontFamily: 'Kanit',
+										),
+									),
+								],
+							),
+							SizedBox(height: 2),
+							// Check out
+							Row(
+								children: [
+									Text(
+										'Check Out ',
+										style: TextStyle(
+											color: Colors.white70,
+											fontSize: 11,
+											fontFamily: 'Kanit',
+										),
+									),
+									Text(
+										checkOut,
+										style: TextStyle(
+											color: Colors.white,
+											fontSize: 11,
+											fontWeight: FontWeight.bold,
+											fontFamily: 'Kanit',
+										),
+									),
+								],
+							),
+							SizedBox(height: 8),
+							// Details button
+							Container(
+								padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+								decoration: BoxDecoration(
+									color: Colors.grey[600],
+									borderRadius: BorderRadius.circular(8),
+								),
+								child: Text(
+									'รายละเอียด',
+									style: TextStyle(
+										color: Colors.white,
+										fontSize: 11,
+										fontFamily: 'Kanit',
+									),
+								),
+							),
+						],
+					),
+				],
+			),
 		);
 	}
 }
@@ -353,52 +576,51 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 				],
 			),
 		);
-	}
-
-	Widget _buildActionButton({required IconData icon, required String label, required VoidCallback onTap}) {
-		return GestureDetector(
-			onTap: onTap,
-			child: Container(
-				width: 56,
-				height: 56,
-				decoration: BoxDecoration(
-					color: Color(0xFF2D2D2D),
-					borderRadius: BorderRadius.circular(12),
-				),
-				child: Icon(icon, color: Colors.white, size: 24),
+	}Widget _buildActionButton({required IconData icon, required String label, required VoidCallback onTap}) {
+	return GestureDetector(
+		onTap: onTap,
+		child: Container(
+			width: 56,
+			height: 56,
+			decoration: BoxDecoration(
+				color: Color(0xFF2D2D2D),
+				borderRadius: BorderRadius.circular(12),
 			),
-		);
-	}
-
-	Widget _buildBookNowButton() {
-		return GestureDetector(
-			onTap: () {
-				print('Book now tapped');
-				setState(() => _showActionBar = false);
-				// ไปยังหน้า Booking Details
-				Navigator.push(
-					context,
-					MaterialPageRoute(
-						builder: (context) => BookingDetailsScreen(),
-					),
-				);
-			},
-			child: Container(
-				padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-				decoration: BoxDecoration(
-					color: Color(0xFFF3C892),
-					borderRadius: BorderRadius.circular(12),
-				),
-				child: Text(
-					'Book now',
-					style: TextStyle(
-						color: Color(0xFF232323),
-						fontWeight: FontWeight.bold,
-						fontFamily: 'Kanit',
-						fontSize: 12,
-					),
-				),
-			),
-		);
-	}
+			child: Icon(icon, color: Colors.white, size: 24),
+		),
+	);
 }
+
+Widget _buildBookNowButton() {
+	return GestureDetector(
+		onTap: () {
+			print('Book now tapped');
+			setState(() => _showActionBar = false);
+			// ไปยังหน้า Booking Details
+			Navigator.push(
+				context,
+				MaterialPageRoute(
+					builder: (context) => BookingDetailsScreen(),
+				),
+			);
+		},
+		child: Container(
+			padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+			decoration: BoxDecoration(
+				color: Color(0xFFF3C892),
+				borderRadius: BorderRadius.circular(12),
+			),
+			child: Text(
+				'Book now',
+				style: TextStyle(
+					color: Color(0xFF232323),
+					fontWeight: FontWeight.bold,
+					fontFamily: 'Kanit',
+					fontSize: 12,
+				),
+			),
+		),
+	);
+}
+}
+

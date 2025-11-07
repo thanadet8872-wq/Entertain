@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'JobCardWidget.dart';
 import 'Profilepertty1.dart';
 import 'MenuDrawer.dart';
+import 'myjob.dart';
 
 
 class WelcomeScreen extends StatefulWidget {
@@ -559,7 +560,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   heroTag: 'search',
                   backgroundColor: Color(0xFFF3E2B7),
                   onPressed: () {},
-                  child: Icon(Icons.search, color: Colors.black),
+                  child: Image.asset(
+                    'image/live-chat.png',
+                    width: 28,
+                    height: 28,
+                  ),
                 ),
               ],
             ),
@@ -576,6 +581,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           setState(() => _selectedIndex = index);
           if (index == 1) {
             Navigator.pushNamed(context, '/chat');
+          } else if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => MyJobPage()),
+            );
           }
         },
         items: [
@@ -606,4 +616,3 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 }
- 
