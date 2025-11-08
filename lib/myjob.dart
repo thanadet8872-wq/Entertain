@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'jobdetail.dart';
 
 class MyJobPage extends StatefulWidget {
   @override
@@ -387,24 +388,70 @@ class _MyJobPageState extends State<MyJobPage>
               ),
               SizedBox(height: 8),
               // Details button
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.grey[600],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  'รายละเอียด',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 11,
-                    fontFamily: 'Kanit',
+              GestureDetector(
+                onTap: () {
+                  _showJobDetailsDialog(
+                    context: context,
+                    title: title,
+                    name: name,
+                    date: date,
+                    code: code,
+                    price: price,
+                    checkIn: checkIn,
+                    checkOut: checkOut,
+                    status: status,
+                    statusColor: statusColor,
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[600],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    'รายละเอียด',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 11,
+                      fontFamily: 'Kanit',
+                    ),
                   ),
                 ),
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  void _showJobDetailsDialog({
+    required BuildContext context,
+    required String title,
+    required String name,
+    required String date,
+    required String code,
+    required String price,
+    required String checkIn,
+    required String checkOut,
+    required String status,
+    required Color statusColor,
+  }) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => JobDetailPage(
+          title: title,
+          name: name,
+          date: date,
+          code: code,
+          price: price,
+          checkIn: checkIn,
+          checkOut: checkOut,
+          status: status,
+          statusColor: statusColor,
+        ),
       ),
     );
   }

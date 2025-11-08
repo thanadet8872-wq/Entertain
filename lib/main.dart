@@ -5,6 +5,7 @@ import 'Chat.dart';
 import 'Notification.dart';
 import 'Profilepertty1.dart';
 import 'myjob.dart';
+import 'cancelJob.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,6 +30,23 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeScreen(),
         '/myjob': (context) => MyJobPage(),
         '/favorite': (context) => FavoriteScreen(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/job_cancelled') {
+          final args = settings.arguments as Map<String, dynamic>?;
+          return MaterialPageRoute(
+            builder: (context) => CancelJobPage(
+              title: args?['title'] ?? 'งานเปิิดตัวบูชเครื่องสำหรับ',
+              name: args?['name'] ?? 'Alena Brown',
+              date: args?['date'] ?? '10 Oct 2025',
+              checkIn: args?['checkIn'] ?? '10:00',
+              checkOut: args?['checkOut'] ?? '18:00',
+              status: args?['status'] ?? 'Cancelled',
+              statusColor: args?['statusColor'] ?? Color(0xFFFF0000),
+            ),
+          );
+        }
+        return null;
       },
     );
   }
