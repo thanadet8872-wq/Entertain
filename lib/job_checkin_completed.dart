@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'Chat.dart';
 import 'cancelJob.dart';
 import 'reviewPage.dart';
+import 'MenuDrawer.dart';
 
 class JobCheckinCompletedPage extends StatefulWidget {
   final String title;
@@ -53,6 +54,7 @@ class _JobCheckinCompletedPageState extends State<JobCheckinCompletedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF181818),
+      endDrawer: MenuDrawer(),
       appBar: AppBar(
         backgroundColor: Color(0xFF181818),
         elevation: 0,
@@ -71,9 +73,13 @@ class _JobCheckinCompletedPageState extends State<JobCheckinCompletedPage> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: Icon(Icons.menu, color: Colors.white),
-            onPressed: () {},
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.menu, color: Colors.white),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            ),
           ),
         ],
       ),

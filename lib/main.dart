@@ -4,6 +4,8 @@ import 'Welcome.dart';
 import 'Chat.dart';
 import 'Notification.dart';
 import 'Profilepertty1.dart';
+import 'ProfileEmployer.dart';
+import 'UpgradePlan.dart';
 import 'myjob.dart';
 import 'cancelJob.dart';
 
@@ -26,7 +28,9 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => WelcomeScreen(),
         '/chat': (context) => ChatScreen(),
         '/notification': (context) => NotificationScreen(),
-        '/profile': (context) => Profilepertty1(),
+        '/profile': (context) => ProfileEmployer(),
+        '/profilepretty': (context) => Profilepertty1(),
+        '/upgrade': (context) => UpgradePlan(),
         '/home': (context) => HomeScreen(),
         '/myjob': (context) => MyJobPage(),
         '/favorite': (context) => FavoriteScreen(),

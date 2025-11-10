@@ -586,6 +586,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               context,
               MaterialPageRoute(builder: (_) => MyJobPage()),
             );
+          } else if (index == 3) {
+            Navigator.pushNamed(context, '/favorite');
+          } else if (index == 4) {
+            Navigator.pushNamed(context, '/profile');
           }
         },
         items: [

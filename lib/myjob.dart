@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'jobdetail.dart';
+import 'MenuDrawer.dart';
 
 class MyJobPage extends StatefulWidget {
   @override
@@ -26,6 +27,7 @@ class _MyJobPageState extends State<MyJobPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF181818),
+      endDrawer: MenuDrawer(),
       appBar: AppBar(
         backgroundColor: Color(0xFF181818),
         elevation: 0,
@@ -42,9 +44,13 @@ class _MyJobPageState extends State<MyJobPage>
           ),
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.menu, color: Colors.white),
-            onPressed: () {},
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.menu, color: Colors.white),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            ),
           ),
         ],
         centerTitle: true,

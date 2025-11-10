@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'MenuDrawer.dart';
 
 class ReviewPage extends StatefulWidget {
   final String title;
@@ -61,6 +62,7 @@ class _ReviewPageState extends State<ReviewPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF181818),
+      endDrawer: MenuDrawer(),
       appBar: AppBar(
         backgroundColor: Color(0xFF181818),
         elevation: 0,
@@ -79,9 +81,13 @@ class _ReviewPageState extends State<ReviewPage>
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: Icon(Icons.menu, color: Colors.white),
-            onPressed: () {},
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.menu, color: Colors.white),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            ),
           ),
         ],
       ),
@@ -435,7 +441,7 @@ class _ReviewPageState extends State<ReviewPage>
               backgroundColor: Colors.transparent,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xFFF5F5F5),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 padding: EdgeInsets.all(24),
@@ -448,32 +454,32 @@ class _ReviewPageState extends State<ReviewPage>
                       child: GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Container(
-                          padding: EdgeInsets.all(4),
+                          padding: EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: Colors.grey[300],
+                            color: Color(0xFFE0E0E0),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             Icons.close,
-                            color: Colors.grey[600],
-                            size: 20,
+                            color: Color(0xFF757575),
+                            size: 18,
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 4),
 
                     // Title
                     Text(
                       'Review',
                       style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey[400],
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFFBDBDBD),
                         fontFamily: 'Kanit',
                       ),
                     ),
-                    SizedBox(height: 24),
+                    SizedBox(height: 20),
 
                     // Star Rating
                     Row(
@@ -486,13 +492,13 @@ class _ReviewPageState extends State<ReviewPage>
                             });
                           },
                           child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            padding: EdgeInsets.symmetric(horizontal: 6),
                             child: Icon(
                               rating > index ? Icons.star : Icons.star_border,
-                              size: 48,
+                              size: 40,
                               color: rating > index
-                                  ? Colors.grey[400]
-                                  : Colors.grey[300],
+                                  ? Color(0xFFE0E0E0)
+                                  : Color(0xFFE0E0E0),
                             ),
                           ),
                         );
@@ -506,16 +512,16 @@ class _ReviewPageState extends State<ReviewPage>
                       child: Row(
                         children: [
                           Icon(
-                            Icons.account_circle,
-                            color: Colors.grey[400],
-                            size: 24,
+                            Icons.account_circle_outlined,
+                            color: Color(0xFF9E9E9E),
+                            size: 22,
                           ),
                           SizedBox(width: 8),
                           Text(
-                            'คนล้าง',
+                            'คนจ้าง',
                             style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.grey[400],
+                              fontSize: 16,
+                              color: Color(0xFF9E9E9E),
                               fontFamily: 'Kanit',
                             ),
                           ),
@@ -526,17 +532,21 @@ class _ReviewPageState extends State<ReviewPage>
 
                     // Comment TextField
                     Container(
-                      height: 200,
+                      height: 150,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(12),
+                        color: Color(0xFFE0E0E0),
+                        borderRadius: BorderRadius.circular(16),
                       ),
                       child: TextField(
                         controller: commentController,
                         maxLines: null,
                         expands: true,
                         textAlignVertical: TextAlignVertical.top,
-                        style: TextStyle(fontFamily: 'Kanit', fontSize: 14),
+                        style: TextStyle(
+                          fontFamily: 'Kanit',
+                          fontSize: 14,
+                          color: Color(0xFF424242),
+                        ),
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.all(16),
@@ -557,29 +567,39 @@ class _ReviewPageState extends State<ReviewPage>
                             SnackBar(
                               content: Text(
                                 'ขอบคุณสำหรับรีวิว!',
-                                style: TextStyle(fontFamily: 'Kanit'),
+                                style: TextStyle(
+                                  fontFamily: 'Kanit',
+                                  color: Colors.black,
+                                ),
                               ),
-                              backgroundColor: Color(0xFFF3C892),
+                              backgroundColor:  Color.fromARGB(255, 243, 200, 146),
                             ),
                           );
                         }
                       },
                       child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 60,
+                          vertical: 12,
+                        ),
                         decoration: BoxDecoration(
                           color: Color(0xFFF3C892),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Submit',
-                            style: TextStyle(
-                              color: Color(0xFF232323),
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Kanit',
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 4,
+                              offset: Offset(0, 2),
                             ),
+                          ],
+                        ),
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(
+                            color: Color(0xFF424242),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Kanit',
                           ),
                         ),
                       ),
