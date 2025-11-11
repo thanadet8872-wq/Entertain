@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'get started.dart';
-import 'Welcome.dart';
-import 'Chat.dart';
+import 'Getstarted/get started.dart';
+import 'Getstarted/Welcome.dart';
+import 'chat/Chat.dart';
 import 'Notification.dart';
 import 'Profilepertty1.dart';
-import 'ProfileEmployer.dart';
+import 'Profile/ProfileEmployer.dart';
 import 'UpgradePlan.dart';
 import 'myjob.dart';
 import 'cancelJob.dart';

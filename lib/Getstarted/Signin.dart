@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'RegisterEmployer.dart';
-import 'ForgotPassword.dart';
+import '../sign-up/RegisterEmployer.dart';
+import '../Forgotpassword/ForgotPassword.dart';
 import 'Welcome.dart';
 
 class SignInScreen extends StatefulWidget {

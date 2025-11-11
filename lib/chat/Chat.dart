@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'booking.dart';
+import '../booking/booking.dart';
 
 class ChatScreen extends StatelessWidget {
 	final List<Map<String, String>> chats = [

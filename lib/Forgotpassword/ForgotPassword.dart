@@ -147,28 +147,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                 ),
               ),
-
-              SizedBox(height: 30),
-              // Social Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () => openWeb('https://www.facebook.com'),
-                    child: Image.asset('image/facebook.png', width: 48),
-                  ),
-                  SizedBox(width: 16),
-                  InkWell(
-                    onTap: () => openWeb('https://www.google.com'),
-                    child: Image.asset('image/google.png', width: 48),
-                  ),
-                  SizedBox(width: 16),
-                  InkWell(
-                    onTap: () => openWeb('https://x.com'),
-                    child: Image.asset('image/x.png', width: 48),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
