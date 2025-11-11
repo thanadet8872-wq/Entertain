@@ -1,5 +1,5 @@
  import 'package:flutter/material.dart';
-import 'chat/Chat.dart';
+import '../chat/Chat.dart';
 
 class CancelJobPage extends StatelessWidget {
   final String title;

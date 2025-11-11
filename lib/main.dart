@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'Getstarted/get started.dart';
 import 'Getstarted/Welcome.dart';
 import 'chat/Chat.dart';
-import 'Notification.dart';
-import 'Profilepertty1.dart';
+import 'screens/Notification.dart';
+import 'Profile/Profilepertty1.dart';
 import 'Profile/ProfileEmployer.dart';
-import 'UpgradePlan.dart';
-import 'myjob.dart';
-import 'cancelJob.dart';
+import 'Profile/UpgradePlan.dart';
+import 'Profile/payment.dart';
+import 'job/myjob.dart';
+import 'job/cancelJob.dart';
+import 'Addcredit/credit_card.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,6 +33,8 @@ class MyApp extends StatelessWidget {
         '/profile': (context) => ProfileEmployer(),
         '/profilepretty': (context) => Profilepertty1(),
         '/upgrade': (context) => UpgradePlan(),
+        '/payment': (context) => PaymentPage(),
+        '/creditcard': (context) => CreditCardPage(),
         '/home': (context) => HomeScreen(),
         '/myjob': (context) => MyJobPage(),
         '/favorite': (context) => FavoriteScreen(),

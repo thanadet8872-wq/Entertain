@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'payment.dart';
 
 class UpgradePlan extends StatefulWidget {
   const UpgradePlan({super.key});
@@ -31,8 +32,8 @@ class _UpgradePlanState extends State<UpgradePlan> {
         centerTitle: true,
         actions: [
           Container(
-            margin: EdgeInsets.only(right: 16, top: 8, bottom: 8),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            margin: EdgeInsets.only(right: 16, top: 4, bottom: 4),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             decoration: BoxDecoration(
               color: Color(0xFFD4AF78),
               borderRadius: BorderRadius.circular(20),
@@ -41,7 +42,7 @@ class _UpgradePlanState extends State<UpgradePlan> {
               child: Text(
                 'VIP',
                 style: TextStyle(
-                  color: Color(0xFF2C2C2E),
+                  color: Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Kanit',
@@ -114,7 +115,7 @@ class _UpgradePlanState extends State<UpgradePlan> {
                               child: Text(
                                 'VIP',
                                 style: TextStyle(
-                                  color: Color(0xFF2C2C2E),
+                                  color: Color(0xFF6B5D4F),
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Kanit',
@@ -147,14 +148,15 @@ class _UpgradePlanState extends State<UpgradePlan> {
               margin: EdgeInsets.symmetric(horizontal: 16),
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  // Handle upgrade
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Upgrade to VIP Plan'),
-                      backgroundColor: Color(0xFFD4AF78),
-                    ),
+                onPressed: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PaymentPage()),
                   );
+                  // ถ้าชำระเงินสำเร็จ ส่งค่ากลับไปหน้า Profile
+                  if (result == true && mounted) {
+                    Navigator.pop(context, true);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFFE8D4B8),

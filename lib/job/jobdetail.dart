@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'job_checkin_completed.dart';
-import 'chat/Chat.dart';
-import 'MenuDrawer.dart';
+import '../chat/Chat.dart';
+import '../widgets/MenuDrawer.dart';
 
 class JobDetailPage extends StatefulWidget {
   final String title;

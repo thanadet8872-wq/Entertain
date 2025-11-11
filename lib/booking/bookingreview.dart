@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../payment_completed_dialog.dart';
+import '../Profile/payment_completed_dialog.dart';
 
 class BookingReviewPage extends StatefulWidget {
   @override

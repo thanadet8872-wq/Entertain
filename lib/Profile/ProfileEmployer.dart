@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../MenuDrawer.dart';
+import '../widgets/MenuDrawer.dart';
 
 class ProfileEmployer extends StatefulWidget {
   const ProfileEmployer({super.key});
@@ -9,6 +9,22 @@ class ProfileEmployer extends StatefulWidget {
 }
 
 class _ProfileEmployerState extends State<ProfileEmployer> {
+  bool isVIPActive = true; // เปลี่ยนเป็น true เพื่อแสดง VIP Card แบบ Active
+  
+  @override
+  void initState() {
+    super.initState();
+    // ตรวจสอบว่ามีการชำระเงินสำเร็จหรือไม่ (จาก route arguments)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkVIPStatus();
+    });
+  }
+  
+  void _checkVIPStatus() {
+    // ในอนาคตสามารถตรวจสอบจาก API หรือ local storage ได้
+    // ตอนนี้ใช้ตัวแปรชั่วคราว
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -239,7 +255,9 @@ class _ProfileEmployerState extends State<ProfileEmployer> {
                   _buildMenuItemInline(
                     icon: Icons.credit_card,
                     title: 'Credit Card',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/creditcard');
+                    },
                   ),
                   
                   Divider(color: Color(0xFF3A3A3C), height: 1, thickness: 1),
@@ -308,150 +326,8 @@ class _ProfileEmployerState extends State<ProfileEmployer> {
             
             SizedBox(height: 24),
             
-            // VIP Plan Card
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 16),
-              padding: EdgeInsets.all(16),
-              height: 240, // Increased height to prevent overflow
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFFA89178), Color(0xFFBEAA8E), Color(0xFFD4C4A8), Color(0xFFE8DCC8)],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 8,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Stack(
-                children: [
-                  // Background image on the right
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(16),
-                        bottomRight: Radius.circular(16),
-                      ),
-                      child: ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                          Color(0xFF6B5D4F), // Brown color
-                          BlendMode.srcATop,
-                        ),
-                        child: Image.asset(
-                          'image/VIPicon.png',
-                          height: 240,
-                          fit: BoxFit.cover,
-                          alignment: Alignment.centerRight,
-                          errorBuilder: (context, error, stackTrace) {
-                            return SizedBox.shrink();
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  
-                  // Content
-                  Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'VIP Plan',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Kanit',
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Icon(Icons.check, color: Colors.white, size: 16),
-                                SizedBox(width: 6),
-                                Text(
-                                  'Voice Call',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                    fontFamily: 'Kanit',
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 3),
-                            Row(
-                              children: [
-                                Icon(Icons.check, color: Colors.white, size: 16),
-                                SizedBox(width: 6),
-                                Text(
-                                  'Unlimited Favorite',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                    fontFamily: 'Kanit',
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              '฿99 / Month',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Kanit',
-                              ),
-                            ),
-                          ],
-                        ),
-                        
-                        // Upgrade Button
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/upgrade');
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFE8D4B8),
-                              padding: EdgeInsets.symmetric(vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              elevation: 0,
-                            ),
-                            child: Text(
-                              'Upgrade Plan',
-                              style: TextStyle(
-                                color: Color(0xFF3C3C3C),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Kanit',
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // VIP Card - แสดงตามสถานะการสมัคร
+            isVIPActive ? _buildActiveVIPCard() : _buildUpgradeVIPCard(),
             
             SizedBox(height: 24),
             
@@ -513,7 +389,7 @@ class _ProfileEmployerState extends State<ProfileEmployer> {
                   _showLogoutDialog();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFE8D4B8),
+                  backgroundColor: Color(0xFFD4AF78),
                   padding: EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -522,7 +398,7 @@ class _ProfileEmployerState extends State<ProfileEmployer> {
                 child: Text(
                   'Logout',
                   style: TextStyle(
-                    color: Color(0xFF3C3C3C),
+                    color: Color(0xFF2C2C2E),
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Kanit',
@@ -581,6 +457,301 @@ class _ProfileEmployerState extends State<ProfileEmployer> {
     );
   }
   
+  // VIP Card แบบยังไม่สมัคร (Upgrade Plan)
+  Widget _buildUpgradeVIPCard() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.all(16),
+      height: 240,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFFA89178), Color(0xFFBEAA8E), Color(0xFFD4C4A8), Color(0xFFE8DCC8)],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          // Background image on the right
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(16),
+                bottomRight: Radius.circular(16),
+              ),
+              child: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  Color(0xFFD4C4A8), // สีเบจ
+                  BlendMode.srcATop,
+                ),
+                child: Image.asset(
+                  'image/VIPicon.png',
+                  height: 240,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.centerRight,
+                  errorBuilder: (context, error, stackTrace) {
+                    return SizedBox.shrink();
+                  },
+                ),
+              ),
+            ),
+          ),
+          
+          // Content
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'VIP Plan',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Kanit',
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.check, color: Colors.white, size: 16),
+                        SizedBox(width: 6),
+                        Text(
+                          'Voice Call',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontFamily: 'Kanit',
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 3),
+                    Row(
+                      children: [
+                        Icon(Icons.check, color: Colors.white, size: 16),
+                        SizedBox(width: 6),
+                        Text(
+                          'Unlimited Favorite',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontFamily: 'Kanit',
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      '฿99 / Month',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Kanit',
+                      ),
+                    ),
+                  ],
+                ),
+                
+                // Upgrade Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final result = await Navigator.pushNamed(context, '/upgrade');
+                      // ถ้ามีการชำระเงินสำเร็จ เปลี่ยนสถานะเป็น VIP
+                      if (result == true && mounted) {
+                        setState(() {
+                          isVIPActive = true;
+                        });
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFE8D4B8),
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: Text(
+                      'Upgrade Plan',
+                      style: TextStyle(
+                        color: Color(0xFF3C3C3C),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Kanit',
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  // VIP Card แบบสมัครแล้ว (Cancel Subscription)
+  Widget _buildActiveVIPCard() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.all(24),
+      height: 240,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF9B8567), Color(0xFFB39E7E), Color(0xFFC9B794), Color(0xFFD9C9AB)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          // Background image on the right
+          Positioned(
+            right: -20,
+            top: 0,
+            bottom: 0,
+            child: Opacity(
+              opacity: 0.4,
+              child: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  Color(0xFFE8DCC8), // สีเบจอ่อน
+                  BlendMode.modulate,
+                ),
+                child: Image.asset(
+                  'image/VIPicon.png',
+                  height: 240,
+                  fit: BoxFit.contain,
+                  alignment: Alignment.centerRight,
+                  errorBuilder: (context, error, stackTrace) {
+                    return SizedBox.shrink();
+                  },
+                ),
+              ),
+            ),
+          ),
+          
+          // Content
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'VIP',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255), // สีน้ำตาลเข้ม
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Kanit',
+                        ),
+                      ),
+                      Text(
+                        '฿99/Month',
+                        style: TextStyle(
+                          color: Color(0xFF6B5D4F), // สีน้ำตาลเข้มเหมือนในรูป
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Kanit',
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    '• Voice Call',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontFamily: 'Kanit',
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    '• Vedio Call',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontFamily: 'Kanit',
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Active until Oct 09, 2025',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.9),
+                      fontSize: 14,
+                      fontFamily: 'Kanit',
+                    ),
+                  ),
+                ],
+              ),
+              
+              // Cancel Subscription Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    _showCancelSubscriptionDialog();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFE85D5D),
+                    padding: EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    'Cancel Subscription',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Kanit',
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  
   Widget _buildBottomNavBar() {
     return Container(
       decoration: BoxDecoration(
@@ -601,17 +772,23 @@ class _ProfileEmployerState extends State<ProfileEmployer> {
             children: [
               _buildNavItem(Icons.home, 'Home', false, () {
                 Navigator.pushNamed(context, '/welcome');
-              }),
-              _buildNavItem(Icons.chat_bubble_outline, 'Chat', false, () {
+              }, useIcon: true),
+              _buildNavItem(null, 'Chat', false, () {
                 Navigator.pushNamed(context, '/chat');
-              }),
+              }, useIcon: false, imagePath: 'image/chat.png'),
               _buildNavItem(Icons.work_outline, 'My Job', false, () {
                 Navigator.pushNamed(context, '/myjob');
-              }),
+              }, useIcon: true),
               _buildNavItem(Icons.favorite_border, 'Favorite', false, () {
-                Navigator.pushNamed(context, '/favorite');
-              }),
-              _buildNavItem(Icons.person, 'Profile', true, () {}),
+                // TODO: Navigate to favorite page
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Favorite page - Coming soon', style: TextStyle(fontFamily: 'Kanit')),
+                    backgroundColor: Color(0xFFD4AF78),
+                  ),
+                );
+              }, useIcon: true),
+              _buildNavItem(Icons.person, 'Profile', true, () {}, useIcon: true),
             ],
           ),
         ),
@@ -619,17 +796,30 @@ class _ProfileEmployerState extends State<ProfileEmployer> {
     );
   }
   
-  Widget _buildNavItem(IconData icon, String label, bool isActive, VoidCallback onTap) {
+  Widget _buildNavItem(IconData? icon, String label, bool isActive, VoidCallback onTap, {bool useIcon = true, String? imagePath}) {
     return InkWell(
       onTap: onTap,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            color: isActive ? Color(0xFFD4AF78) : Colors.grey[400],
-            size: 24,
-          ),
+          if (useIcon)
+            Icon(
+              icon,
+              color: isActive ? Color(0xFFD4AF78) : Colors.grey[400],
+              size: 24,
+            )
+          else
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                isActive ? Color(0xFFD4AF78) : Colors.grey[400]!,
+                BlendMode.srcIn,
+              ),
+              child: Image.asset(
+                imagePath!,
+                width: 24,
+                height: 24,
+              ),
+            ),
           SizedBox(height: 4),
           Text(
             label,
@@ -747,6 +937,70 @@ class _ProfileEmployerState extends State<ProfileEmployer> {
             },
             child: Text(
               'Delete',
+              style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Kanit',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  void _showCancelSubscriptionDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Color(0xFF2C2C2E),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Text(
+          'Cancel Subscription',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Kanit',
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to cancel your VIP subscription? You will lose access to all VIP features.',
+          style: TextStyle(
+            color: Colors.grey[300],
+            fontFamily: 'Kanit',
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Keep Subscription',
+              style: TextStyle(
+                color: Colors.grey[400],
+                fontFamily: 'Kanit',
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() {
+                isVIPActive = false; // เปลี่ยนกลับเป็นแบบยังไม่สมัคร
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Subscription cancelled successfully',
+                    style: TextStyle(fontFamily: 'Kanit'),
+                  ),
+                  backgroundColor: Color(0xFFE85D5D),
+                ),
+              );
+            },
+            child: Text(
+              'Cancel',
               style: TextStyle(
                 color: Colors.red,
                 fontWeight: FontWeight.bold,

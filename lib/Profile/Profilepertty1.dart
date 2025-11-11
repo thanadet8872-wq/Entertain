@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'MenuDrawer.dart';
+import '../widgets/MenuDrawer.dart';
 
 class Profilepertty1 extends StatefulWidget {
   const Profilepertty1({super.key});

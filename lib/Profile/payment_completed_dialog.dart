@@ -9,11 +9,12 @@ class _PaymentCompletedDialogState extends State<PaymentCompletedDialog> {
   @override
   void initState() {
     super.initState();
-    // หลังจาก 1.5 วินาที ให้นำทางไปยังหน้า My Job
-    Future.delayed(Duration(milliseconds: 1500), () {
+    // หลังจาก 2 วินาที ให้นำทางไปยังหน้า Profile
+    Future.delayed(Duration(seconds: 2), () {
       if (mounted) {
         Navigator.pop(context); // ปิด dialog
-        Navigator.pushNamed(context, '/myjob'); // ไปยังหน้า My Job
+        Navigator.pop(context); // ปิดหน้า Payment
+        Navigator.pushNamed(context, '/profile'); // ไปยังหน้า Profile
       }
     });
   }
@@ -35,21 +36,21 @@ class _PaymentCompletedDialogState extends State<PaymentCompletedDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: 56,
-                height: 56,
+                width: 64,
+                height: 64,
                 decoration: BoxDecoration(
-                  color: Color(0xFF00FF00),
+                  color: Color(0xFF4CAF50),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.check, color: Colors.white, size: 36),
+                child: Icon(Icons.check, color: Colors.white, size: 40),
               ),
               SizedBox(height: 16),
               Text(
                 'Payment completed',
                 style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF4CAF50),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
                   fontFamily: 'Kanit',
                 ),
               ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../JobCardWidget.dart';
-import '../Profilepertty1.dart';
-import '../MenuDrawer.dart';
-import '../myjob.dart';
+import '../job/JobCardWidget.dart';
+import '../Profile/Profilepertty1.dart';
+import '../widgets/MenuDrawer.dart';
+import '../job/myjob.dart';
 
 
 class WelcomeScreen extends StatefulWidget {

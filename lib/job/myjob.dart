@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'jobdetail.dart';
-import 'MenuDrawer.dart';
+import '../widgets/MenuDrawer.dart';
 
 class MyJobPage extends StatefulWidget {
   @override
