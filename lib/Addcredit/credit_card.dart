@@ -1,236 +1,431 @@
 import 'package:flutter/material.dart';
+import 'add_credit_card_dialog.dart';
+import 'completed_dialog.dart';
 import '../widgets/MenuDrawer.dart';
-import 'Cerdit_card.dart';
+import 'package:flutter/services.dart';
+
+class ExpiryDateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    String digits = newValue.text.replaceAll(RegExp(r'\D'), '');
+    StringBuffer buffer = StringBuffer();
+    for (int i = 0; i < digits.length && i < 4; i++) {
+      if (i == 2) buffer.write('/');
+      buffer.write(digits[i]);
+    }
+    return TextEditingValue(
+      text: buffer.toString(),
+      selection: TextSelection.collapsed(offset: buffer.length),
+    );
+  }
+}
+
+class CardNumberInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    String digits = newValue.text.replaceAll(RegExp(r'\D'), '');
+    StringBuffer buffer = StringBuffer();
+    for (int i = 0; i < digits.length; i++) {
+      buffer.write(digits[i]);
+      if ((i + 1) % 4 == 0 && i + 1 != digits.length) {
+        buffer.write(' ');
+      }
+    }
+    return TextEditingValue(
+      text: buffer.toString(),
+      selection: TextSelection.collapsed(offset: buffer.length),
+    );
+  }
+}
 
 class CreditCardPage extends StatefulWidget {
-  const CreditCardPage({super.key});
+  const CreditCardPage({Key? key}) : super(key: key);
 
   @override
   State<CreditCardPage> createState() => _CreditCardPageState();
-
 }
 
 class _CreditCardPageState extends State<CreditCardPage> {
 
+  void _showAddCompletedDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const CompletedDialog(),
+    );
+  }
 
-  // Tooltip and related variables removed for simplicity
+
+  void _showDeleteConfirmationDialog(BuildContext context, VoidCallback onDelete) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Do you want to remove this card from your account?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Kanit',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17,
+                    color: Color(0xFF23211E),
+                  ),
+                ),
+                SizedBox(height: 28),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        onDelete();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFE74C3C),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'Delete',
+                        style: TextStyle(
+                          fontFamily: 'Kanit',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFD9D9D9),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontFamily: 'Kanit',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          color: Color(0xFF6B6B6B),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   List<Map<String, String>> _creditCards = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF1C1C1E),
+      drawer: MenuDrawer(),
       appBar: AppBar(
-        backgroundColor: Color(0xFF1C1C1E),
+        backgroundColor: const Color(0xFF23211E),
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white, size: 24),
-          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(
-          'Credit Card',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Kanit',
-          ),
-        ),
+        title: const Text('Credit Card', style: TextStyle(color: Colors.white, fontFamily: 'Kanit', fontWeight: FontWeight.bold)),
         centerTitle: true,
         actions: [
           Builder(
             builder: (context) => IconButton(
-              icon: Icon(Icons.menu, color: Colors.white, size: 24),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
+              icon: const Icon(Icons.menu, color: Colors.white),
+              onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           ),
         ],
       ),
-      endDrawer: MenuDrawer(),
+      backgroundColor: const Color(0xFF23211E),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 20),
-          // Add credit card button
-          InkWell(
-            onTap: () {
-              _showAddCreditCardDialog();
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 16),
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-              child: Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Color(0xFFD4AF78),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(Icons.add, color: Color(0xFF1C1C1E), size: 20),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, top: 32, bottom: 8),
+            child: InkWell(
+              onTap: () async {
+                await showDialog(
+                  context: context,
+                  builder: (context) => AddCreditCardDialog(
+                    onAdd: (card) {
+                      setState(() {
+                        _creditCards.add(card);
+                      });
+                      Future.delayed(const Duration(milliseconds: 100), () {
+                        _showAddCompletedDialog();
+                      });
+                    },
                   ),
-                  SizedBox(width: 12),
-                  Text(
+                );
+              },
+              borderRadius: BorderRadius.circular(24),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.add_circle, color: Color(0xFFD4AF78), size: 22),
+                  const SizedBox(width: 8),
+                  const Text(
                     'Add credit card',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Color(0xFFD4AF78),
                       fontSize: 16,
                       fontFamily: 'Kanit',
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          SizedBox(height: 20),
-          Expanded(
-            child: _creditCards.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+          // Card list
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            child: Column(
+              children: _creditCards.map((card) {
+                String cardNumber = card['number'] ?? '';
+                String cardHolder = card['holder'] ?? '';
+                String type = _detectCardType(cardNumber);
+                String masked = _maskCardNumber(cardNumber);
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF232325),
+                    borderRadius: BorderRadius.circular(14),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.08),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.credit_card_outlined,
-                          color: Colors.grey[600],
-                          size: 80,
-                        ),
-                        SizedBox(height: 16),
-                        Text(
-                          'No credit cards yet',
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 16,
-                            fontFamily: 'Kanit',
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          'Add your first credit card',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 14,
-                            fontFamily: 'Kanit',
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: _creditCards.length,
-                    itemBuilder: (context, index) {
-                      final card = _creditCards[index];
-                      return Container(
-                        margin: EdgeInsets.only(bottom: 16),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF232325),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              // Remove card brand image to avoid asset error
-              leading: null,
-                          title: Text(
-                            card['name'] ?? '',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Kanit',
-                            ),
-                          ),
-                          subtitle: Text(
-                            card['number'] ?? '',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Kanit',
-                            ),
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFFD4AF78),
-                                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  elevation: 0,
+                        // Logo
+                        type == 'mastercard'
+                            ? Container(
+                                width: 38,
+                                height: 38,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF5E6C8),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Text(
-                                  'Edit',
-                                  style: TextStyle(
-                                    color: Color(0xFF232325),
-                                    fontFamily: 'Kanit',
-                                    fontWeight: FontWeight.bold,
+                                child: Center(
+                                  child: SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Positioned(
+                                          left: 0,
+                                          child: Container(
+                                            width: 14,
+                                            height: 14,
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFFE74C3C),
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          right: 0,
+                                          child: Container(
+                                            width: 14,
+                                            height: 14,
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFFF5C242),
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          left: 3,
+                                          child: Container(
+                                            width: 14,
+                                            height: 14,
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFF59B23).withOpacity(0.7),
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
+                                ),
+                              )
+                            : type == 'visa'
+                                ? Container(
+                                    width: 38,
+                                    height: 38,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text('VISA', style: TextStyle(color: Color(0xFF23211E), fontWeight: FontWeight.bold, fontFamily: 'Kanit', fontSize: 15)),
+                                  )
+                                : Container(width: 38, height: 38),
+                        const SizedBox(width: 12),
+                        // Name & number
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                cardHolder,
+                                style: const TextStyle(
+                                  color: Color(0xFFF5E6C8),
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Kanit',
+                                  fontSize: 16,
                                 ),
                               ),
-                              SizedBox(width: 8),
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _creditCards.removeAt(index);
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFFB14D4D),
-                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  elevation: 0,
-                                ),
-                                child: Text(
-                                  'Delete',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Kanit',
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              const SizedBox(height: 2),
+                              Text(
+                                masked,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Kanit',
+                                  fontSize: 13,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      );
-                    },
+                        const SizedBox(width: 8),
+                        SizedBox(
+                          width: 54,
+                          height: 30,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _showEditCreditCardDialog(card, _creditCards.indexOf(card));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFF5E6C8),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              elevation: 0,
+                              padding: EdgeInsets.zero,
+                            ),
+                            child: const Text(
+                              'Edit',
+                              style: TextStyle(
+                                color: Color(0xFF23211E),
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Kanit',
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        SizedBox(
+                          width: 54,
+                          height: 30,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _showDeleteConfirmationDialog(context, () {
+                                setState(() {
+                                  _creditCards.remove(card);
+                                });
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFE74C3C),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              elevation: 0,
+                              padding: EdgeInsets.zero,
+                            ),
+                            child: const Text(
+                              'Delete',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Kanit',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                );
+              }).toList(),
+            ),
           ),
         ],
       ),
       bottomNavigationBar: _buildBottomNavBar(),
     );
+  }
 
-}
-
-  // Move these methods inside the _CreditCardPageState class
   Widget _buildBottomNavBar() {
     return Container(
-      decoration: BoxDecoration(
-        color: Color(0xFF2C2C2E),
+      decoration: const BoxDecoration(
+        color: Color(0xFF23211E),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 10,
+            color: Colors.black26,
+            blurRadius: 8,
             offset: Offset(0, -2),
           ),
         ],
       ),
       child: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildNavItem(Icons.home, 'Home', false, () {
                 Navigator.pushNamed(context, '/welcome');
               }),
-              _buildNavItem(null, 'Chat', false, () {
+              _buildNavItem(Icons.chat_bubble_outline, 'Chat', false, () {
                 Navigator.pushNamed(context, '/chat');
-              }, imagePath: 'image/chat.png'),
+              }),
               _buildNavItem(Icons.work_outline, 'My Job', false, () {
                 Navigator.pushNamed(context, '/myjob');
               }),
@@ -245,7 +440,7 @@ class _CreditCardPageState extends State<CreditCardPage> {
                   ),
                 );
               }),
-              _buildNavItem(Icons.person, 'Profile', false, () {
+              _buildNavItem(Icons.person, 'Profile', true, () {
                 Navigator.pushNamed(context, '/profile');
               }),
             ],
@@ -253,385 +448,464 @@ class _CreditCardPageState extends State<CreditCardPage> {
         ),
       ),
     );
-
-}
+  }
 
   Widget _buildNavItem(
-    IconData? icon,
+    IconData icon,
     String label,
     bool isActive,
-    VoidCallback onTap, {
-    String? imagePath,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (icon != null)
-            Icon(
-              icon,
-              color: isActive ? Color(0xFFD4AF78) : Colors.grey[400],
-              size: 24,
-            )
-          else
-            ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                isActive ? Color(0xFFD4AF78) : Colors.grey[400]!,
-                BlendMode.srcIn,
-              ),
-              child: Image.asset(imagePath!, width: 24, height: 24),
-            ),
-          SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: isActive ? Color(0xFFD4AF78) : Colors.grey[400],
-              fontSize: 11,
-              fontFamily: 'Kanit',
-            ),
-          ),
-        ],
-      ),
-    );
-
-}
-
-  void _showAddCreditCardDialog() {
-
-    final cardNumberController = TextEditingController();
-    final expiryController = TextEditingController();
-    final cvvController = TextEditingController();
-    final cardHolderController = TextEditingController();
-    bool isDefault = false;
-    showDialog(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) => Dialog(
-          backgroundColor: Colors.transparent,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Color(0xFF23211E),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Info bar
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF5E6C8),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xFFF5E6C8),
-                              shape: BoxShape.circle,
-                            ),
-                            padding: EdgeInsets.all(4),
-                            child: Icon(Icons.verified_user, color: Color(0xFF7A6846), size: 28), // shield/check icon
-                          ),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              'Card information is kept secret.',
-                              style: TextStyle(
-                                color: Color(0xFF7A6846),
-                                fontFamily: 'Kanit',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+    VoidCallback onTap,
+  ) {
+    bool isChat = label == 'Chat';
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              isChat
+                  ? Image.asset(
+                      'image/chat.png',
+                      width: 26,
+                      height: 26,
+                      color: isActive ? Color(0xFFD4AF78) : Colors.white,
+                    )
+                  : Icon(
+                      icon,
+                      color: isActive ? Color(0xFFD4AF78) : Colors.white,
+                      size: 26,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(height: 18),
-                          Row(
-                            children: [
-                              Text(
-                                'Card info',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Kanit',
-                                  fontSize: 16,
-                                ),
-                              ),
-                              SizedBox(width: 16),
-                              Row(
-                                children: [
-                                  Radio<int>(
-                                    value: 0,
-                                    groupValue: 0,
-                                    onChanged: null,
-                                    activeColor: Color(0xFFD4AF78),
-                                  ),
-                                  Text('VISA', style: TextStyle(color: Colors.white, fontFamily: 'Kanit', fontWeight: FontWeight.bold)),
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          Text(
-                            'Card Number',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontFamily: 'Kanit',
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          TextField(
-                            controller: cardNumberController,
-                            keyboardType: TextInputType.number,
-                            style: TextStyle(color: Colors.black, fontFamily: 'Kanit'),
-                            decoration: InputDecoration(
-                              hintText: '1234 1234 1234 1234',
-                              hintStyle: TextStyle(
-                                color: Colors.grey[400],
-                                fontFamily: 'Kanit',
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 14,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Expire date',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontFamily: 'Kanit',
-                                      ),
-                                    ),
-                                    SizedBox(height: 4),
-                                    TextField(
-                                      controller: expiryController,
-                                      keyboardType: TextInputType.number,
-                                      style: TextStyle(color: Colors.black, fontFamily: 'Kanit'),
-                                      decoration: InputDecoration(
-                                        hintText: 'MM/YY',
-                                        hintStyle: TextStyle(
-                                          color: Colors.grey[400],
-                                          fontFamily: 'Kanit',
-                                        ),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                          borderSide: BorderSide.none,
-                                        ),
-                                        contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                          vertical: 14,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'CVV Code',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontFamily: 'Kanit',
-                                          ),
-                                        ),
-                                        SizedBox(width: 4),
-                                        Icon(Icons.info_outline, color: Colors.white38, size: 16),
-                                      ],
-                                    ),
-                                    SizedBox(height: 4),
-                                    TextField(
-                                      controller: cvvController,
-                                      keyboardType: TextInputType.number,
-                                      maxLength: 3,
-                                      obscureText: true,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'Kanit',
-                                      ),
-                                      decoration: InputDecoration(
-                                        hintText: '123',
-                                        hintStyle: TextStyle(
-                                          color: Colors.grey[400],
-                                          fontFamily: 'Kanit',
-                                        ),
-                                        counterText: '',
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(8),
-                                          borderSide: BorderSide.none,
-                                        ),
-                                        contentPadding: EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                          vertical: 14,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 12),
-                          Text(
-                            'Cardholder Name',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontFamily: 'Kanit',
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          TextField(
-                            controller: cardHolderController,
-                            style: TextStyle(color: Colors.black, fontFamily: 'Kanit'),
-                            decoration: InputDecoration(
-                              hintText: 'Enter your name on the card',
-                              hintStyle: TextStyle(
-                                color: Colors.grey[400],
-                                fontFamily: 'Kanit',
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide.none,
-                              ),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 14,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Switch(
-                                value: isDefault,
-                                onChanged: (value) {
-                                  setState(() {
-                                    isDefault = value;
-                                  });
-                                },
-                                activeColor: Color(0xFFD4AF78),
-                              ),
-                              SizedBox(width: 8),
-                              Text(
-                                'Set as default payment method',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontFamily: 'Kanit',
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 24),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    // Add card logic here
-                                    Navigator.pop(context);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xFFF5E6C8),
-                                    padding: EdgeInsets.symmetric(vertical: 14),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    elevation: 0,
-                                  ),
-                                  child: Text(
-                                    'Submit',
-                                    style: TextStyle(
-                                      color: Color(0xFF23211E),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Kanit',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 12),
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xFFD1D1D1),
-                                    padding: EdgeInsets.symmetric(vertical: 14),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    elevation: 0,
-                                  ),
-                                  child: Text(
-                                    'Cancel',
-                                    style: TextStyle(
-                                      color: Color(0xFF23211E),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Kanit',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 18),
-                        ],
-                      ),
-                    ),
-                  ],
+              const SizedBox(height: 2),
+              Text(
+                label,
+                style: TextStyle(
+                  color: isActive ? Color(0xFFD4AF78) : Colors.white,
+                  fontSize: 12,
+                  fontFamily: 'Kanit',
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),
     );
+  }
+  // --- Edit Credit Card Dialog ---
+  void _showEditCreditCardDialog(Map<String, String> card, int index) {
+    final cardNumberController = TextEditingController(
+      text: card['number'] ?? '',
+    );
+    final expiryController = TextEditingController(text: card['expiry'] ?? '');
+    final cvvController = TextEditingController(text: card['cvv'] ?? '');
+    final cardHolderController = TextEditingController(
+      text: card['holder'] ?? '',
+    );
+    bool isDefault = card['isDefault'] == 'true';
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) => Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 24,
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF232325),
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // AppBar
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF232325),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(18),
+                        topRight: Radius.circular(18),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        const Expanded(
+                          child: Text(
+                            'Edit Credit Card',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Kanit',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        const SizedBox(width: 40), // for symmetry
+                      ],
+                    ),
+                  ),
+                  // Card info box
+                  Padding(
+                    padding: const EdgeInsets.all(18),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF232325),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  'Card info',
+                                  style: TextStyle(
+                                    color: Color(0xFFF5E6C8),
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Kanit',
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Icon(
+                                  Icons.radio_button_checked,
+                                  size: 18,
+                                  color: Color(0xFFD4AF78),
+                                ),
+                                const SizedBox(width: 2),
+                                const Text(
+                                  'VISA',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Kanit',
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 18),
+                            const Text(
+                              'Card Number',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontFamily: 'Kanit',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            TextField(
+                              controller: cardNumberController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [CardNumberInputFormatter()],
+                              maxLength: 19,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Kanit',
+                              ),
+                              decoration: InputDecoration(
+                                hintText: '1234 1234 1234 1234',
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontFamily: 'Kanit',
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide.none,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 14,
+                                ),
+                                counterText: '',
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Expire date',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontFamily: 'Kanit',
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      TextField(
+                                        controller: expiryController,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          ExpiryDateInputFormatter(),
+                                        ],
+                                        maxLength: 5,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: 'Kanit',
+                                        ),
+                                        decoration: InputDecoration(
+                                          hintText: 'MM/YY',
+                                          hintStyle: TextStyle(
+                                            color: Colors.grey,
+                                            fontFamily: 'Kanit',
+                                          ),
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                            borderSide: BorderSide.none,
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                horizontal: 16,
+                                                vertical: 14,
+                                              ),
+                                          counterText: '',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 14),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          const Text(
+                                            'CVV Code',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontFamily: 'Kanit',
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Icon(
+                                            Icons.info_outline,
+                                            color: Colors.white38,
+                                            size: 18,
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 6),
+                                      TextField(
+                                        controller: cvvController,
+                                        keyboardType: TextInputType.number,
+                                        maxLength: 3,
+                                        obscureText: true,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontFamily: 'Kanit',
+                                        ),
+                                        decoration: InputDecoration(
+                                          hintText: '123',
+                                          hintStyle: TextStyle(
+                                            color: Colors.grey,
+                                            fontFamily: 'Kanit',
+                                          ),
+                                          counterText: '',
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                            borderSide: BorderSide.none,
+                                          ),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                horizontal: 16,
+                                                vertical: 14,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 14),
+                            const Text(
+                              'Cardholder Name',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontFamily: 'Kanit',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            TextField(
+                              controller: cardHolderController,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Kanit',
+                              ),
+                              decoration: InputDecoration(
+                                hintText: 'Enter your name on the card',
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontFamily: 'Kanit',
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide.none,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 14,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            Row(
+                              children: [
+                                Switch(
+                                  value: isDefault,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isDefault = value;
+                                    });
+                                  },
+                                  activeColor: const Color(0xFFD4AF78),
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Set as default payment method',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontFamily: 'Kanit',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Save changes
+                              setState(() {
+                                _creditCards[index] = {
+                                  'number': cardNumberController.text,
+                                  'expiry': expiryController.text,
+                                  'cvv': cvvController.text,
+                                  'holder': cardHolderController.text,
+                                  'isDefault': isDefault.toString(),
+                                };
+                              });
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFF5E6C8),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: const Text(
+                              'Save',
+                              style: TextStyle(
+                                color: Color(0xFF23211E),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Kanit',
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFD1D1D1),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(
+                                color: Color(0xFF23211E),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Kanit',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // Helper for card type
+  String _detectCardType(String number) {
+    if (number.startsWith('4')) return 'visa';
+    if (number.startsWith('5')) return 'mastercard';
+    return 'unknown';
+  }
+
+  String _maskCardNumber(String number) {
+    if (number.length < 4) return number;
+    String last4 = number.substring(number.length - 4);
+    return '${number.substring(0, 4)} XXXX XXXX $last4';
   }
 }

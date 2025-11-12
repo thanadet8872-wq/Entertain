@@ -10,6 +10,7 @@ import 'Profile/payment.dart';
 import 'job/myjob.dart';
 import 'job/cancelJob.dart';
 import 'Addcredit/credit_card.dart';
+import 'My_wallet/my_wallet.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeScreen(),
         '/myjob': (context) => MyJobPage(),
         '/favorite': (context) => FavoriteScreen(),
+        '/wallet': (context) => MyWalletPage(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == '/job_cancelled') {
@@ -71,9 +73,21 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Color(0xFF1A1A1A),
       ),
       body: Center(
-        child: Text(
-          'Home Screen',
-          style: TextStyle(color: Colors.white, fontSize: 24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Home Screen',
+              style: TextStyle(color: Colors.white, fontSize: 24),
+            ),
+            SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/wallet');
+              },
+              child: Text('ไปหน้า My Wallet'),
+            ),
+          ],
         ),
       ),
     );
